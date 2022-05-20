@@ -1,0 +1,30 @@
+body {
+    padding: 1%
+}
+
+header > h1 {
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.banner {
+    margin-left: 80%;
+}
+
+.banner > a {
+    margin-right: 10%;
+    font-size: 1.3em;
+}
+header > p {
+    text-align: left;
+    margin-right: 5%;
+}
+
+nav {
+    padding: 0 30% 0 30%;
+    display: flex;
+    justify-content: space-around;
+}
+
+

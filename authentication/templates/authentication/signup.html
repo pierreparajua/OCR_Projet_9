@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 {% load static %}
 
 <html lang="en">
@@ -8,17 +8,23 @@
     <link rel="stylesheet" href="{% static 'css/signup_style.css' %}">
 </head>
 <body>
-    {% block content %}
+    <header>
+        {% if user.is_authenticated %}
+        <p id="connection">Bienvenue {{ request.user }}<a href="{% url 'logout' %}">Se déconnecter</a></p>
+        {% endif %}
+        <h1 id="mainTitle">LITReview</h1>
+    </header>
+
     <h2>Inscription</h2>
     {% if form.errors %}
-        {{ form.errors }}
+        <div class="error">{{ form.errors }}</div>
     {% endif %}
     <form method="post">
-        {{ form.as_ul }}
+        {{ form.as_p }}
         {% csrf_token %}
         <button type="submit" >S’inscrire</button>
+        <button onclick="window.location.href = '{% url 'login' %}';">Retour</button>
     </form>
-{% endblock content %}
 
 
 </body>

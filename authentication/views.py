@@ -16,7 +16,7 @@ def login_page(request):
             )
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('flux')
             else:
                 message = 'Identifiants invalides.'
     return render(
@@ -26,6 +26,7 @@ def login_page(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
 
 def signup_page(request):
     form = forms.SignupForm()

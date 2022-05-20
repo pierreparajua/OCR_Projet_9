@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 {% load static %}
 
 <html>
@@ -7,12 +7,18 @@
         <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
     </head>
     <body>
-    {% block content %}
-        <div class="main">
+        <header>
+            {% if user.is_authenticated %}
+            <p id="connection">Bienvenue {{ request.user }}.
+                <a href="{% url 'logout' %}">Se déconnecter</a></p>
+            {% endif %}
+            <h1 id="mainTitle">LITReview</h1>
+        </header>
+        <div class="container">
             <div class="authentication">
                 <p>{{ message }}</p>
                 <form method="post">
-                    {{ form.as_ul }}
+                    {{ form.as_table }}
                     {% csrf_token %}
                     <button type="submit" >Se connecter</button>
                 </form>
@@ -21,6 +27,5 @@
                 <p>Pas encore membre ? </p><a href="{% url 'signup' %}"> Inscrivez-vous maintenant !</a>
             </div>
         </div>
-    {% endblock content %}
     </body>
 </html>

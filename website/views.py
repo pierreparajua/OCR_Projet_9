@@ -3,5 +3,5 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def home(request):
-    return render(request, 'website/home.html')
+def flux(request):
+    return render(request, 'website/flux.html')
