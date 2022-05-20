@@ -1,13 +1,16 @@
-
+{% load static %}
 <html>
     <head>
-        <title>FotoBlog</title>
+        <title>LITReview</title>
+        <link rel="stylesheet" href="{% static 'css/base_style.css' %}">
     </head>
     <body>
-        <h1>LITReview</h1>
-        {% block content %}{% endblock content %}
         {% if user.is_authenticated %}
-            <p>Vous êtes connecté en tant que {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+            <p id="connection">Bienvenue {{ request.user }}.
+                <a href="{% url 'logout' %}">Se déconnecter</a></p>
         {% endif %}
+        <h1 id="mainTitle">LITReview</h1>
+        {% block content %}{% endblock content %}
+
     </body>
 </html>

@@ -1,10 +1,26 @@
-
 {% extends 'base.html' %}
-{% block content %}
-    <p>{{ message }}</p>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit" >Se connecter</button>
-    </form>
-{% endblock content %}
+{% load static %}
+
+<html>
+    <head>
+        <title>LITReview</title>
+        <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
+    </head>
+    <body>
+    {% block content %}
+        <div class="main">
+            <div class="authentication">
+                <p>{{ message }}</p>
+                <form method="post">
+                    {{ form.as_ul }}
+                    {% csrf_token %}
+                    <button type="submit" >Se connecter</button>
+                </form>
+            </div>
+            <div class="signup">
+                <p>Pas encore membre ? </p><a href="{% url 'signup' %}"> Inscrivez-vous maintenant !</a>
+            </div>
+        </div>
+    {% endblock content %}
+    </body>
+</html>
