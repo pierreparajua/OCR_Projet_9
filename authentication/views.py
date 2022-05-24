@@ -5,6 +5,7 @@ from . import forms
 
 
 def login_page(request):
+    logout_user(request)
     form = forms.LoginForm()
     message = ''
     if request.method == 'POST':

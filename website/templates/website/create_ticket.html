@@ -1,14 +1,16 @@
 
-{% load static %}
 
+<!DOCTYPE html>
+
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>LITReview_flux</title>
     <link rel="stylesheet" href="{% static 'css/flux_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_ticket_style.css' %}">
 </head>
 <body>
-
     <header>
         {% if user.is_authenticated %}
         <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
@@ -21,16 +23,17 @@
         <h1 id="mainTitle">LITReview</h1>
     </header>
 
-    <nav>
-        <button onclick="window.location.href = '{% url 'demander une critique' %}';">Demander une critique</button>
-        <button onclick="window.location.href = '{% url 'login' %}';">Créer une critique</button>
-    </nav>
+    <h2>Créer un ticket</h2>
 
-    <article>
-
-    </article>
-
-
+    <form class="form" method="post" enctype="multipart/form-data">
+        <div class="fields">
+        {{ ticket_form.as_ul }}
+        {% csrf_token %}
+        </div>
+        <div class="send">
+        <button  type="submit" >Envoyer</button>
+        </div >
+    </form>
 
 </body>
 </html>

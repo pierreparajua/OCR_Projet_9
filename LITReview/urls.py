@@ -23,5 +23,6 @@ urlpatterns = [
     path('', authentication.views.login_page, name='login'),
     path('logout/', authentication.views.logout_user, name='logout'),
     path('flux/', website.views.flux, name='flux'),
-    path('signup/', authentication.views.signup_page, name='signup')
+    path('signup/', authentication.views.signup_page, name='signup'),
+    path('create_ticket', website.views.create_ticket, name='demander une critique')
 ]

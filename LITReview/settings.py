@@ -119,3 +119,6 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'website/flux'
 
 STATICFILES_DIRS = [BASE_DIR / "LITReview/static", BASE_DIR / "authentication/static"]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
