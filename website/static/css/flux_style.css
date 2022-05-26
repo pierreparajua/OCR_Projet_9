@@ -1,5 +1,5 @@
 body {
-    padding: 1%
+    padding: 1%;
 }
 
 header > h1 {
@@ -8,12 +8,19 @@ header > h1 {
     margin-bottom: 50px;
 }
 
+a:link
+{
+ text-decoration:none;
+}
+
+
 .banner {
-    margin-left: 80%;
+    display: flex;
+    justify-content: end;
 }
 
 .banner > a {
-    margin-right: 10%;
+    margin-right: 5%;
     font-size: 1.3em;
 }
 header > p {
@@ -27,4 +34,34 @@ nav {
     justify-content: space-around;
 }
 
+h2 {
+    text-align: center;
+}
+
+article {
+    padding: 0 30% 0 30%;
+}
+
+.post {
+    padding: 1% 2% 0 2%;
+    margin-top: 2%;
+    border-color: black;
+    border:  1px solid;
+}
+.post > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.date {
+    display: inline;
+    item-align: right;
+}
+
+img {
+    padding-bottom: 10px;
+    max-width: 120px;
+    height: auto;
+
+}
 

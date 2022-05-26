@@ -1,0 +1,37 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LITReview_flux</title>
+    <link rel="stylesheet" href="{% static 'css/flux_style.css' %}">
+</head>
+<body>
+
+    <header>
+        {% if user.is_authenticated %}
+        <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+        {% endif %}
+        <div class="banner">
+            <a><b>Flux</b></a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a>Abonnements</a>
+        </div>
+        <h1 id="mainTitle">LITReview</h1>
+    </header>
+
+    <article>
+        <h2>Suivre des utilisateurs</h2>
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit" >Confirmer</button>
+        </form>
+    </article>
+
+
+
+
+
+</body>
+</html>

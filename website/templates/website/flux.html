@@ -14,22 +14,38 @@
         <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
         {% endif %}
         <div class="banner">
-            <a class="active">Flux</a>
-            <a>Posts</a>
-            <a>Abonnements</a>
+            <a><b>Flux</b></a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'follow_users' %}">Abonnements</a>
         </div>
         <h1 id="mainTitle">LITReview</h1>
     </header>
 
     <nav>
-        <button onclick="window.location.href = '{% url 'demander une critique' %}';">Demander une critique</button>
-        <button onclick="window.location.href = '{% url 'login' %}';">Créer une critique</button>
+        <button onclick="window.location.href = '{% url 'create_ticket' %}';">Demander une critique</button>
+        <button onclick="window.location.href = '{% url 'create_review' %}';">Créer une critique</button>
     </nav>
 
     <article>
+        {% for post in posts %}
+            {% if post.content_type == 'TICKET' %}
+            <div class="post">
+                <div>
+                    <p class ="title"> {{ post.user }} demande une critique</p>
+                    <p class="date"> {{ post.time_created }}</p>
+                </div>
+                <p> {{ post.title }}: {{ post.description }}</p>
+
+                    <br>
+            {% elif post.content_type == 'REVIEW' %}
+                <p class ="title"> {{ post.user }} a publié une critique</p>
+                <p class="date"> {{ post.time_created }}</p>
+                <p> {{ post.headline }}: {{ post.body }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
 
     </article>
-
 
 
 </body>
