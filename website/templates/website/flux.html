@@ -28,19 +28,38 @@
 
     <article>
         {% for post in posts %}
-            {% if post.content_type == 'TICKET' %}
+            {% if post.content_type == 'REVIEW' %}
+            <div class="post">
+                <div class="review">
+                    <div class="header_review">
+                        <p class ="title"> {{ post.user }} a publié une critique</p>
+                        <p class="date"> {{ post.time_created }}</p>
+                    </div>
+                    <h3> {{ post.headline}}: score {{ post.rating }}/5</h3>
+                    <p> {{ post.body}}</p>
+                </div>
+                <div class="ticket_review">
+                    <div class="header_ticket_review">
+                        <p class ="title"> {{ post.ticket.user }} demande une critique</p>
+                        <p class="date"> {{ post.ticket.time_created }}</p>
+                    </div>
+                    <p> {{ post.ticket.title }}: {{ post.ticket.description }}</p>
+                    {% if post.ticket.image %}
+                        <img src="{{ post.ticket.image.url }}">
+                    {% endif %}
+                </div>
+            </div>
+
+            {% elif post.content_type == 'TICKET' %}
             <div class="post">
                 <div>
                     <p class ="title"> {{ post.user }} demande une critique</p>
                     <p class="date"> {{ post.time_created }}</p>
                 </div>
                 <p> {{ post.title }}: {{ post.description }}</p>
-
-                    <br>
-            {% elif post.content_type == 'REVIEW' %}
-                <p class ="title"> {{ post.user }} a publié une critique</p>
-                <p class="date"> {{ post.time_created }}</p>
-                <p> {{ post.headline }}: {{ post.body }}</p>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}">
+                {% endif %}
             </div>
             {% endif %}
         {% endfor %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import CharField, Value
 from itertools import chain
-
+from website.models import Review
 from website import forms, models
 
 
@@ -11,10 +11,14 @@ def flux(request):
     reviews = models.Review.objects.filter(user=request.user)
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
 
-    tickets = models.Review.objects.filter(user=request.user)
+    tickets = models.Ticket.objects.filter(user=request.user)
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
 
     posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
+
+    for post in posts:
+        if isinstance(post, Review):
+            posts.remove(post.ticket)
 
     return render(request, 'website/flux.html', context={'posts': posts})
 

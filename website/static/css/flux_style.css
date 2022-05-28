@@ -38,20 +38,34 @@ h2 {
     text-align: center;
 }
 
+
 article {
     padding: 0 30% 0 30%;
 }
 
 .post {
-    padding: 1% 2% 0 2%;
-    margin-top: 2%;
-    border-color: black;
-    border:  1px solid;
+    padding: 1% 2% 1% 2%;
+    margin-top: 5%;
+    border : 1px solid;
+    border-color : black;
 }
-.post > div {
+
+.header_review {
     display: flex;
     justify-content: space-between;
 }
+
+.ticket_review {
+    border : 1px solid;
+    border-color : black;
+    padding: 5px
+}
+
+.header_ticket_review {
+    display: flex;
+    justify-content: space-between;
+}
+
 
 .date {
     display: inline;
