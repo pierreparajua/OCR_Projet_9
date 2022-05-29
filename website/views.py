@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import CharField, Value
 from itertools import chain
-from website.models import Review
+from website.models import Review, UserFollows
 from website import forms, models
 
 
@@ -11,7 +11,7 @@ def flux(request):
     reviews = models.Review.objects.filter(user=request.user)
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
 
-    tickets = models.Ticket.objects.filter(user=request.user)
+    tickets = models.Ticket.objects.all()
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
 
     posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
@@ -71,7 +71,8 @@ def follow_users(request):
         if form.is_valid():
             form.save()
             return redirect('flux')
-    return render(request, 'website/follow_users.html', context={'form': form})
+    followed_users = models.UserFollows.objects.filter(user_id=request.user)
+    return render(request, 'website/follow_users.html', context={'form': form, "followed_users": followed_users})
 
 
 """

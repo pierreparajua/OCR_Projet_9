@@ -30,6 +30,7 @@ class Review(models.Model):
 
 
 class UserFollows(models.Model):
+    objects = models.Manager()
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')
     followed_user = models.ForeignKey(to=settings.AUTH_USER_MODEL,
                                       on_delete=models.CASCADE,

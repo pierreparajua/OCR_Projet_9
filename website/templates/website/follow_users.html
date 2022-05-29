@@ -21,12 +21,20 @@
     </header>
 
     <article>
+        {% if followed_users %}
+            <h2>Utilisateurs que vous suivez:</h2>
+            {% for followed_user in followed_users %}
+                <p>- {{ followed_user.followed_user.username }}</p>
+            {% endfor %}
+        {% endif %}
         <h2>Suivre des utilisateurs</h2>
         <form method="post">
             {{ form.as_p }}
             {% csrf_token %}
             <button type="submit" >Confirmer</button>
         </form>
+
+
     </article>
 
 
