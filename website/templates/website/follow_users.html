@@ -13,7 +13,7 @@
         <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
         {% endif %}
         <div class="banner">
-            <a><b>Flux</b></a>
+            <a href="{% url 'flux' %}"><b>Flux</b></a>
             <a href="{% url 'posts' %}">Posts</a>
             <a>Abonnements</a>
         </div>
@@ -29,7 +29,7 @@
         {% endif %}
         <h2>Suivre des utilisateurs</h2>
         <form method="post">
-            {{ form.as_p }}
+            {{ user_followed_form.as_p }}
             {% csrf_token %}
             <button type="submit" >Confirmer</button>
         </form>
