@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import CharField, Value
 from itertools import chain
 
-from django.contrib.auth.models import User
+from authentication.models import User
 from website.models import Review, UserFollows
 from website import forms, models
 
@@ -69,18 +69,24 @@ def display_posts(request):
 
 @login_required
 def follow_users(request):
-    user_followed_form = forms.FollowUsersForm(instance=request.user)
-    if request.method == 'POST':
-        user_followed_form = forms.FollowUsersForm(request.POST, instance=request.user)
-        if user_followed_form.is_valid():
-            user_followed = user_followed_form.save(commit=False)
-            user_followed.user = request.user
-            user_followed.save()
+    all_followed = models.UserFollows.objects.all()
+    x = [followed.followed_user.username for followed in list(all_followed)]
+    x.append(request.user)
+    print(x)
+    print(request.user)
+    users = User.objects.exclude(username__in =x )
+    print(users)
 
-            return redirect('flux')
+
+
+
+
+
+
+
     followed_users = UserFollows.objects.filter(user_id=request.user)
-    return render(request, 'website/follow_users.html', context={'user_followed_form': user_followed_form,
-                                                                 "followed_users": followed_users})
+    return render(request, 'website/follow_users.html', context={"followed_users": followed_users,
+                                                                 "users": users})
 
 
 """
