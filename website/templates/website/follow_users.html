@@ -21,27 +21,24 @@
     </header>
 
     <article>
-        {% if followed_users %}
+        {% if users_followed %}
             <h2>Utilisateurs que vous suivez:</h2>
-            {% for followed_user in followed_users %}
-                <p>- {{ followed_user.followed_user.username }}</p>
+            {% for user_followed in users_followed %}
+                <p>- {{ user_followed.followed_user.username }}</p>
             {% endfor %}
         {% endif %}
         <h2>Suivre des utilisateurs</h2>
-        <form method="post">
-            {{ user_followed_form.as_p }}
+
+        <form method="POST">
             {% csrf_token %}
-            <button type="submit" >Confirmer</button>
-        </form>
+            <select  size="1">
+            {% for user_to_follow in users_to_follow %}
+                <option>{{ user_to_follow }}
+            {% endfor %}
+            </select>
+            <input type="submit">
+         </form>
 
-     <FORM>
-<SELECT name="nom" size="1">
-    {% for user in users %}
-<OPTION>{{ user }}
-    {% endfor %}
-
-</SELECT>
-</FORM>
 
 
     </article>

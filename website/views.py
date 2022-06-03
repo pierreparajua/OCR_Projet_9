@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import CharField, Value
@@ -7,7 +6,6 @@ from itertools import chain
 from authentication.models import User
 from website.models import Review, UserFollows
 from website import forms, models
-
 
 
 @login_required
@@ -19,10 +17,6 @@ def flux(request):
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
 
     posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
-
-    for post in posts:
-        if isinstance(post, Review):
-            posts.remove(post.ticket)
 
     return render(request, 'website/flux.html', context={'posts': posts})
 
@@ -69,24 +63,16 @@ def display_posts(request):
 
 @login_required
 def follow_users(request):
-    all_followed = models.UserFollows.objects.all()
-    x = [followed.followed_user.username for followed in list(all_followed)]
-    x.append(request.user)
-    print(x)
-    print(request.user)
-    users = User.objects.exclude(username__in =x )
-    print(users)
+    users_followed = UserFollows.objects.filter(user_id=request.user)
+    users_to_exclude = [user_followed.followed_user.username for user_followed in users_followed]
+    users_to_exclude.append(request.user.username)
+    users_to_follow = User.objects.exclude(username__in=users_to_exclude)
+    print(users_to_follow)
 
-
-
-
-
-
-
-
-    followed_users = UserFollows.objects.filter(user_id=request.user)
-    return render(request, 'website/follow_users.html', context={"followed_users": followed_users,
-                                                                 "users": users})
+    if request.method == "POST":
+        print(request.POST)
+    return render(request, 'website/follow_users.html', context={"users_followed": users_followed,
+                                                                 "users_to_follow": users_to_follow})
 
 
 """
