@@ -10,13 +10,22 @@ from website import forms, models
 
 @login_required
 def flux(request):
+    users_followed = UserFollows.objects.filter(user_id=request.user)
+
     reviews = models.Review.objects.filter(user=request.user)
+    review_from_followed = models.Review.objects.filter(user__in=[user_followed.followed_user for user_followed
+                                                                  in users_followed])
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    review_from_followed = review_from_followed.annotate(content_type=Value('REVIEW', CharField()))
 
-    tickets = models.Ticket.objects.all()
+    tickets = models.Ticket.objects.filter(user=request.user)
+    tickets_from_followed = models.Ticket.objects.filter(user__in=[user_followed.followed_user for user_followed
+                                                                   in users_followed])
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+    tickets_from_followed = tickets_from_followed.annotate(content_type=Value('TICKET', CharField()))
 
-    posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
+    posts = sorted(chain(reviews, review_from_followed, tickets, tickets_from_followed),
+                   key=lambda post: post.time_created, reverse=True)
 
     return render(request, 'website/flux.html', context={'posts': posts})
 
