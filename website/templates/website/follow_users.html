@@ -27,8 +27,16 @@
                 <p>- {{ user_followed.followed_user.username }}</p>
             {% endfor %}
         {% endif %}
-        <h2>Suivre des utilisateurs</h2>
 
+
+        {% if users_follow_you %}
+            <h2>Les utilisateurs qui vous suivent:</h2>
+            {% for user_follow in users_follow_you %}
+                <p>- {{ user_follow }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <h2>Suivre des utilisateurs</h2>
         <form method="POST">
             {% csrf_token %}
             <select  size="1">

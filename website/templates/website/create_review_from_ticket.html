@@ -1,0 +1,40 @@
+
+
+<!DOCTYPE html>
+
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LITReview_create_review</title>
+    <link rel="stylesheet" href="{% static 'css/flux_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_ticket_style.css' %}">
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated %}
+        <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
+        {% endif %}
+        <div class="banner">
+            <a href="{% url 'flux' %}">Flux</a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'follow_users' %}">Abonnements</a>
+        </div>
+        <h1 id="mainTitle">LITReview</h1>
+    </header>
+
+    <h2>Créer une critique en réponse au ticket: {{ ticket.title }}</h2>
+
+    <form class="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="fields">
+            {{ ticket_form}}
+
+        </div>
+        <div class="send">
+        <button  type="submit" >Envoyer</button>
+        </div >
+    </form>
+
+</body>
+</html>

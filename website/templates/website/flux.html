@@ -52,13 +52,19 @@
 
             {% else %}
             <div class="post">
-                <div>
+                <div class="ticket">
                     <p class ="title"> {{ post.user }} demande une critique</p>
                     <p class="date"> {{ post.time_created }}</p>
                 </div>
                 <p> {{ post.title }}: {{ post.description }}</p>
                 {% if post.image %}
                     <img src="{{ post.image.url }}">
+                {% endif %}
+                {% if not  post.id in tickets_already_answer %}
+                    <form action='{% url "create_review_from_ticket" %}'  method='post'>
+                    {% csrf_token %}
+                        <button type="submit" value="{{ post.id }}" name="ticket_id"> Créer une critique  </button>
+                    </form>
                 {% endif %}
             </div>
             {% endif %}
