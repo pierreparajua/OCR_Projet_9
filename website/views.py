@@ -70,11 +70,24 @@ def create_review(request):
 
 @login_required
 def create_review_from_ticket(request):
-    ticket = Ticket.objects.get(id=request.POST['ticket_id'])
+    id_ticket = request.POST.get('ticket', False)
+    print(id_ticket)
+    ticket = Ticket.objects.get(pk=id_ticket)
     data_ticket = {"title": ticket.title, "description": ticket.description, "image": ticket.image}
     ticket_form = forms.TicketForm(initial=data_ticket)
+
+    review_form = forms.ReviewForm()
+    if request.method == "POST":
+        review_form = forms.ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.user = request.user
+            review.ticket = ticket.id
+            review.save()
+            return redirect('flux')
     return render(request, 'website/create_review_from_ticket.html', context={"ticket": ticket,
-                                                                              "ticket_form": ticket_form})
+                                                                              "ticket_form": ticket_form,
+                                                                              "review_form": review_form})
 
 
 @login_required

@@ -63,7 +63,7 @@
                 {% if not  post.id in tickets_already_answer %}
                     <form action='{% url "create_review_from_ticket" %}'  method='post'>
                     {% csrf_token %}
-                        <button type="submit" value="{{ post.id }}" name="ticket_id"> Créer une critique  </button>
+                        <button type="submit" value="{{ post.id }}" name="ticket"> Créer une critique  </button>
                     </form>
                 {% endif %}
             </div>

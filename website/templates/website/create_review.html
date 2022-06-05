@@ -22,13 +22,12 @@
         </div>
         <h1 id="mainTitle">LITReview</h1>
     </header>
-
-    <h2>Créer une critique</h2>
-
+    <h2>Créer le ticket</h2>
     <form class="form" method="post" enctype="multipart/form-data">
         <div class="fields">
             {{ ticket_form.as_ul }}
             <br>
+            <h2>Créer la critique</h2>
             {{ review_form.as_ul }}
             {% csrf_token %}
         </div>

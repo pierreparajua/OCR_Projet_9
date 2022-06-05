@@ -22,19 +22,18 @@
         </div>
         <h1 id="mainTitle">LITReview</h1>
     </header>
+    <article>
 
-    <h2>Créer une critique en réponse au ticket: {{ ticket.title }}</h2>
-
-    <form class="form" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="fields">
-            {{ ticket_form}}
-
-        </div>
-        <div class="send">
-        <button  type="submit" >Envoyer</button>
-        </div >
-    </form>
-
+        <h2>Créer la critique :</h2>
+        <form class="form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="fields">
+                {{ review_form.as_ul }}
+            </div>
+            <div class="send">
+                <button  type="submit" >Envoyer</button>
+            </div >
+        </form>
+    </article>
 </body>
 </html>
