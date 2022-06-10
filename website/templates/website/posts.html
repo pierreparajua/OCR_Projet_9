@@ -14,18 +14,30 @@
         <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
         {% endif %}
         <div class="banner">
-            <a><b>Posts</b></a>
             <a href="{% url 'flux' %}">Flux</a>
-            <a>Abonnements</a>
+            <a><b>Posts</b></a>
+            <a href="{% url 'follow_users' %}">Abonnements</a>
         </div>
         <h1 id="mainTitle">LITReview</h1>
     </header>
 
-    <article>
-        <h2>Vos posts</h2>
+     <article>
         {% for post in posts %}
+            {% if post.content_type == 'REVIEW' %}
             <div class="post">
-                <div>
+                <div class="review">
+                    <div class="header_review">
+                        <p class ="title"> {{ post.user }} a publié une critique</p>
+                        <p class="date"> {{ post.time_created }}</p>
+                    </div>
+                    <h3> {{ post.headline}}: score {{ post.rating }}/5</h3>
+                    <p> {{ post.body}}</p>
+                </div>
+            </div>
+
+            {% else %}
+            <div class="post">
+                <div class="ticket">
                     <p class ="title"> {{ post.user }} demande une critique</p>
                     <p class="date"> {{ post.time_created }}</p>
                 </div>
@@ -34,6 +46,7 @@
                     <img src="{{ post.image.url }}">
                 {% endif %}
             </div>
+            {% endif %}
         {% endfor %}
 
     </article>

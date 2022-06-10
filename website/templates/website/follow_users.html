@@ -21,34 +21,32 @@
     </header>
 
     <article>
+        <h2>Suivre des utilisateurs</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <select  size="1" name="to_follow">
+            {% for user_to_follow in users_to_follow %}
+                <option value="{{ user_to_follow.id }}">{{ user_to_follow }}</option>
+            {% endfor %}
+            </select>
+            <input type="submit">
+         </form>
         {% if users_followed %}
             <h2>Utilisateurs que vous suivez:</h2>
             {% for user_followed in users_followed %}
-                <p>- {{ user_followed.followed_user.username }}</p>
+                <p>- {{ user_followed.followed_user.username }}
+                    <form>
+                    <button type="submit" name="to_delete" value="{{ user_followed.followed_user.username }}">Supprimer
+                    </button></form></p>
+
             {% endfor %}
         {% endif %}
-
-
         {% if users_follow_you %}
             <h2>Les utilisateurs qui vous suivent:</h2>
             {% for user_follow in users_follow_you %}
                 <p>- {{ user_follow }}</p>
             {% endfor %}
         {% endif %}
-
-        <h2>Suivre des utilisateurs</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <select  size="1">
-            {% for user_to_follow in users_to_follow %}
-                <option>{{ user_to_follow }}
-            {% endfor %}
-            </select>
-            <input type="submit">
-         </form>
-
-
-
     </article>
 
 

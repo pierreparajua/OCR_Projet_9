@@ -23,7 +23,18 @@
         <h1 id="mainTitle">LITReview</h1>
     </header>
     <article>
-
+        <h2>Ticket: {{ ticket.title }}</h2>
+            <div class="post">
+                <div class="ticket">
+                    <p class ="title"> {{ ticket.user }} demande une critique</p>
+                    <p class="date"> {{ ticket.time_created }}</p>
+                </div>
+                <p> {{ ticket.title }}: {{ ticket.description }}</p>
+                {% if ticket.image %}
+                    <img src="{{ ticket.image.url }}">
+                {% endif %}
+            </div>
+        <br>
         <h2>Créer la critique :</h2>
         <form class="form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -31,7 +42,7 @@
                 {{ review_form.as_ul }}
             </div>
             <div class="send">
-                <button  type="submit" >Envoyer</button>
+                <button  type="submit">Envoyer</button>
             </div >
         </form>
     </article>

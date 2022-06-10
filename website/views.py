@@ -69,12 +69,8 @@ def create_review(request):
 
 
 @login_required
-def create_review_from_ticket(request):
-    id_ticket = request.POST.get('ticket', False)
-    print(id_ticket)
-    ticket = Ticket.objects.get(pk=id_ticket)
-    data_ticket = {"title": ticket.title, "description": ticket.description, "image": ticket.image}
-    ticket_form = forms.TicketForm(initial=data_ticket)
+def create_review_from_ticket(request, ticket_id):
+    ticket = Ticket.objects.get(pk=ticket_id)
 
     review_form = forms.ReviewForm()
     if request.method == "POST":
@@ -82,17 +78,21 @@ def create_review_from_ticket(request):
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.user = request.user
-            review.ticket = ticket.id
+            review.ticket = Ticket.objects.get(pk=ticket_id)
             review.save()
             return redirect('flux')
     return render(request, 'website/create_review_from_ticket.html', context={"ticket": ticket,
-                                                                              "ticket_form": ticket_form,
                                                                               "review_form": review_form})
 
 
 @login_required
 def display_posts(request):
-    posts = Ticket.objects.filter(user=request.user)
+    tickets = Ticket.objects.filter(user=request.user)
+    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+    reviews = Review.objects.filter(user=request.user)
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    posts = sorted(chain(reviews, tickets),
+                   key=lambda post: post.time_created, reverse=True)
     return render(request, 'website/posts.html', context={"posts": posts})
 
 
@@ -105,25 +105,17 @@ def follow_users(request):
     users_to_exclude = [user_followed.followed_user.username for user_followed in users_followed]
     users_to_exclude.append(request.user.username)
     users_to_follow = User.objects.exclude(username__in=users_to_exclude)
-
     if request.method == "POST":
-        print(request.POST)
+        print(request.POST["to_delete"])
+        """
+        to_follow = User.objects.get(pk=request.POST["to_follow"])
+        if to_follow in users_to_follow:
+            UserFollows(user=request.user, followed_user=to_follow).save()
+        """
+
     return render(request, 'website/follow_users.html', context={"users_followed": users_followed,
                                                                  "users_to_follow": users_to_follow,
                                                                  "users_follow_you": users_follow_you})
 
 
-"""
-@login_required
-def create_review(request):
-    review_form = forms.ReviewForm()
-    if request.method == "POST":
-        review_form = forms.ReviewForm(request.POST)
-        if review_form.is_valid():
-            review = review_form.save(commit=False)
-            review.user = request.user
-            review.save()
-            return redirect('flux')
-    context = {"ticket_form": review_form}
-    return render(request, 'website/create_review.html', context=context)
-"""
+
