@@ -32,6 +32,15 @@
                     </div>
                     <h3> {{ post.headline}}: score {{ post.rating }}/5</h3>
                     <p> {{ post.body}}</p>
+                    <form method="post" action="{% url 'delete_review' post.id  %}"
+                          onsubmit="return confirm('Voulez vous vraiment supprimer cette critique ?')">
+                          {% csrf_token %}
+                          <button type="submit">Supprimer </button>
+                    </form>
+                    <form method="post" action="{% url 'update_review' post.id  %}">
+                          {% csrf_token %}
+                          <button type="submit">Modifier</button>
+                    </form>
                 </div>
             </div>
 
@@ -45,6 +54,15 @@
                 {% if post.image %}
                     <img src="{{ post.image.url }}">
                 {% endif %}
+                <form method="post" action="{% url 'delete_ticket' post.id  %}"
+                          onsubmit="return confirm('Voulez vous vraiment supprimer ce ticket ?')">
+                    {% csrf_token %}
+                    <button type="submit">Supprimer </button>
+                </form>
+                 <form method="post" action="{% url 'update_ticket' post.id  %}">
+                     {% csrf_token %}
+                     <button type="submit">Modifier</button>
+                 </form>
             </div>
             {% endif %}
         {% endfor %}

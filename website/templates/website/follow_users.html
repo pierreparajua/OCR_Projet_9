@@ -34,11 +34,14 @@
         {% if users_followed %}
             <h2>Utilisateurs que vous suivez:</h2>
             {% for user_followed in users_followed %}
-                <p>- {{ user_followed.followed_user.username }}
-                    <form>
-                    <button type="submit" name="to_delete" value="{{ user_followed.followed_user.username }}">Supprimer
-                    </button></form></p>
+                <p>- {{ user_followed.followed_user.username }}</p>
+                    <form method="post" action="{% url 'delete_user' user_followed.followed_user.id  %}"
+                          onsubmit="return confirm('Voulez vous vraiment supprimer cet abonnement ?')">
+                        {% csrf_token %}
 
+                        <button type="submit" name="to_delete">Supprimer
+                    </button>
+                    </form>
             {% endfor %}
         {% endif %}
         {% if users_follow_you %}
