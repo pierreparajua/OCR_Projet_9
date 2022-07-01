@@ -60,7 +60,7 @@
                 {% if post.image %}
                     <img src="{{ post.image.url }}">
                 {% endif %}
-                {% if not  post.id in tickets_already_answer %}
+                {% if not  post in tickets_already_answer %}
                     <a href="{%url 'create_review_from_ticket' post.id %}" > Créer une critique  </a>
                 {% endif %}
             </div>

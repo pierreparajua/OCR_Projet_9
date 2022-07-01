@@ -11,24 +11,32 @@ from website import forms
 @login_required
 def flux(request):
     users_followed = UserFollows.objects.filter(user_id=request.user)
+    reviews = Review.objects.all()
+    tickets_user = Ticket.objects.filter(user=request.user)
 
-    reviews = Review.objects.filter(user=request.user)
     reviews_from_followed = Review.objects.filter(user__in=[user_followed.followed_user for user_followed
                                                             in users_followed])
-    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
-    reviews_from_followed = reviews_from_followed.annotate(content_type=Value('REVIEW', CharField()))
+    tickets_id = [ticket.id for ticket in tickets_user]
+    reviews_ticket_id = [review.ticket.id for review in reviews]
+    reviews_from_ticket_not_followed = Review.objects.filter(ticket__in=list(set(tickets_id) & set(reviews_ticket_id)))
+    reviews_user = Review.objects.filter(user=request.user).exclude(pk__in=reviews_from_ticket_not_followed)
 
-    tickets = Ticket.objects.filter(user=request.user)
+    reviews_user = reviews_user.annotate(content_type=Value('REVIEW', CharField()))
+    reviews_from_followed = reviews_from_followed.annotate(content_type=Value('REVIEW', CharField()))
+    reviews_from_ticket_not_followed = reviews_from_ticket_not_followed.annotate(
+        content_type=Value('REVIEW', CharField()))
+
     tickets_from_followed = Ticket.objects.filter(user__in=[user_followed.followed_user for user_followed
                                                             in users_followed])
-    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+    tickets_user = tickets_user.annotate(content_type=Value('TICKET', CharField()))
     tickets_from_followed = tickets_from_followed.annotate(content_type=Value('TICKET', CharField()))
 
-    posts = sorted(chain(reviews, reviews_from_followed, tickets, tickets_from_followed),
+    posts = sorted(chain(reviews_user, reviews_from_followed, reviews_from_ticket_not_followed,
+                         tickets_user, tickets_from_followed),
                    key=lambda post: post.time_created, reverse=True)
 
-    tickets_already_answer = [review.ticket_id for review in reviews] + \
-                             [review_from_followed.ticket_id for review_from_followed in reviews_from_followed]
+    tickets_already_answer = Ticket.objects.filter(pk__in=reviews_ticket_id)
+    print(tickets_already_answer)
 
     return render(request, 'website/flux.html', context={'posts': posts,
                                                          'tickets_already_answer': tickets_already_answer})
@@ -164,6 +172,7 @@ def delete_ticket(request, ticket_id):
             return redirect('posts')
     except UserFollows.DoesNotExist:
         pass
+
 
 @login_required
 def update_ticket(request, ticket_id):
