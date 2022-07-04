@@ -1,27 +1,12 @@
-{% load static %}
+{% extends 'base.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LITReview_flux</title>
-    <link rel="stylesheet" href="{% static 'css/flux_style.css' %}">
-</head>
-<body>
+{% block title %}
+        <ttle>Abonnement</ttle>
+{% endblock %}
 
-    <header>
-        {% if user.is_authenticated %}
-        <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
-        {% endif %}
-        <div class="banner">
-            <a href="{% url 'flux' %}"><b>Flux</b></a>
-            <a href="{% url 'posts' %}">Posts</a>
-            <a>Abonnements</a>
-        </div>
-        <h1 id="mainTitle">LITReview</h1>
-    </header>
-
+{% block content %}
     <article>
-        <h2>Suivre des utilisateurs</h2>
+        <h2>Suivre d'autres utilisateurs</h2>
         <form method="POST">
             {% csrf_token %}
             <select  size="1" name="to_follow">
@@ -29,32 +14,32 @@
                 <option value="{{ user_to_follow.id }}">{{ user_to_follow }}</option>
             {% endfor %}
             </select>
-            <input type="submit">
+            <input type="submit" class="btn-primary rounded ">
          </form>
         {% if users_followed %}
-            <h2>Utilisateurs que vous suivez:</h2>
-            {% for user_followed in users_followed %}
-                <p>- {{ user_followed.followed_user.username }}</p>
-                    <form method="post" action="{% url 'delete_user' user_followed.followed_user.id  %}"
-                          onsubmit="return confirm('Voulez vous vraiment supprimer cet abonnement ?')">
-                        {% csrf_token %}
-
-                        <button type="submit" name="to_delete">Supprimer
-                    </button>
-                    </form>
-            {% endfor %}
+            <h2 class="mt-5">Utilisateurs que vous suivez:</h2>
+                {% for user_followed in users_followed %}
+                    <div class="border border-secondary border-2 rounded-3 d-flex justify-content-between my-2 mx-5">
+                        <h4 class="m-2">{{ user_followed.followed_user.username }}</h4>
+                        <form method="post" action="{% url 'delete_user' user_followed.followed_user.id  %}"
+                              onsubmit="return confirm('Voulez vous vraiment supprimer cet abonnement ?')">
+                            {% csrf_token %}
+                            <button type="submit" name="to_delete" class="btn-danger rounded m-2 ">Désabonner</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
         {% if users_follow_you %}
-            <h2>Les utilisateurs qui vous suivent:</h2>
+            <h2>Abonnés:</h2>
             {% for user_follow in users_follow_you %}
-                <p>- {{ user_follow }}</p>
+                <h4 class="border border-secondary border-2 rounded-3 d-flex justify-content-between my-2 mx-5 p-2">
+                    {{ user_follow }}</h4>
             {% endfor %}
         {% endif %}
     </article>
+{% endblock %}
 
 
 
 
-
-</body>
-</html>

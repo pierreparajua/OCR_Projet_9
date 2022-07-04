@@ -1,31 +1,21 @@
+{% extends 'base.html'%}
 
-{% load static %}
+{% block title %}
+        <title>Signup</title>
+{% endblock %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LITReview</title>
-    <link rel="stylesheet" href="{% static 'css/signup_style.css' %}">
-</head>
-<body>
-    <header>
-        {% if user.is_authenticated %}
-        <p id="connection">Bienvenue {{ request.user }}<a href="{% url 'logout' %}">Se déconnecter</a></p>
-        {% endif %}
-        <h1 id="mainTitle">LITReview</h1>
-    </header>
-
-    <h2>Inscription</h2>
+{% block content %}
+        <h2>Inscription</h2>
     {% if form.errors %}
         <div class="error">{{ form.errors }}</div>
     {% endif %}
     <form method="post">
-        {{ form.as_p }}
+        {{ form.as_table }}
         {% csrf_token %}
-        <button type="submit" >S’inscrire</button>
-        <button onclick="window.location.href = '{% url 'login' %}';">Retour</button>
+        <div class="mt-5">
+            <button class="btn-primary rounded" type="submit" >S’inscrire</button>
+            <button class="btn-outline-primary rounded" onclick="window.location.href = '{% url 'login' %}'">Retour</button>
+        </div>
     </form>
+{% endblock %}
 
-
-</body>
-</html>

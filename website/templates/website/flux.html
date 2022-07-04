@@ -1,74 +1,62 @@
+{% extends 'base.html'%}
 
-{% load static %}
+{% block title %}
+        <title>Flux</title>
+{% endblock %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LITReview_flux</title>
-    <link rel="stylesheet" href="{% static 'css/flux_style.css' %}">
-</head>
-<body>
-
-    <header>
-        {% if user.is_authenticated %}
-        <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
-        {% endif %}
-        <div class="banner">
-            <a><b>Flux</b></a>
-            <a href="{% url 'posts' %}">Posts</a>
-            <a href="{% url 'follow_users' %}">Abonnements</a>
-        </div>
-        <h1 id="mainTitle">LITReview</h1>
-    </header>
-
-    <nav>
-        <button onclick="window.location.href = '{% url 'create_ticket' %}';">Demander une critique</button>
-        <button onclick="window.location.href = '{% url 'create_review' %}';">Créer une critique</button>
-    </nav>
-
-    <article>
+{% block content %}
+    <section>
+        <button class="btn-success rounded" onclick="window.location.href = '{% url 'create_ticket' %}';">
+            Créer un ticket</button>
+        <button class="btn-primary rounded" onclick="window.location.href = '{% url 'create_review' %}';">
+            Créer une critique</button>
+    </section>
+    <section>
         {% for post in posts %}
             {% if post.content_type == 'REVIEW' %}
-            <div class="post">
-                <div class="review">
-                    <div class="header_review">
-                        <p class ="title"> {{ post.user }} a publié une critique</p>
-                        <p class="date"> {{ post.time_created }}</p>
+            <div class="border border-3 rounded-3 my-4">
+                <div>
+                    <div class="d-flex justify-content-between m-3">
+                        <p> {{ post.user }} a publié une critique</p>
+                        <p> {{ post.time_created }}</p>
                     </div>
-                    <h3> {{ post.headline}}: score {{ post.rating }}/5</h3>
-                    <p> {{ post.body}}</p>
-                </div>
-                <div class="ticket_review">
-                    <div class="header_ticket_review">
-                        <p class ="title"> Ticket - {{ post.ticket.user }}</p>
-                        <p class="date"> {{ post.ticket.time_created }}</p>
+                        <h3 class="text-start m-3"> {{ post.headline}} - score {{ post.rating }}/5</h3>
+                        <p class="text-start m-3"> {{ post.body}}</p>
                     </div>
-                    <p> {{ post.ticket.title }}: {{ post.ticket.description }}</p>
+                <div class="border border-success border-2 rounded-3 m-2">
+                    <div class="d-flex justify-content-between m-3">
+                        <p> Ticket - {{ post.ticket.user }}</p>
+                        <p> {{ post.ticket.time_created }}</p>
+                    </div>
+                    <div>
+                    <p class="text-start m-3"> {{ post.ticket.title }}: {{ post.ticket.description }}</p>
                     {% if post.ticket.image %}
-                        <img src="{{ post.ticket.image.url }}">
+                        <img  src="{{ post.ticket.image.url }}" class="d-flex justify-content-between m-3 rounded"
+                              style="width: 200px; height: auto;">
                     {% endif %}
+                    </div>
                 </div>
             </div>
 
             {% else %}
-            <div class="post">
-                <div class="ticket">
-                    <p class ="title"> {{ post.user }} demande une critique</p>
-                    <p class="date"> {{ post.time_created }}</p>
+            <div class="border border-success border-2 rounded-3 m-2 pb-2">
+                <div class="d-flex justify-content-between m-3">
+                    <p> {{ post.user }} demande une critique</p>
+                    <p> {{ post.time_created }}</p>
                 </div>
-                <p> {{ post.title }}: {{ post.description }}</p>
+                <p class="text-start m-3"> {{ post.title }}: {{ post.description }}</p>
                 {% if post.image %}
-                    <img src="{{ post.image.url }}">
+                    <img src="{{ post.image.url }}" class="d-flex justify-content-between m-3 rounded"
+                         style="width: 200px; height: auto;">
                 {% endif %}
                 {% if not  post in tickets_already_answer %}
-                    <a href="{%url 'create_review_from_ticket' post.id %}" > Créer une critique  </a>
+                    <a href="{%url 'create_review_from_ticket' post.id %}"
+                       class=" text-decoration-none btn-primary rounded p-1 ">Créer une critique  </a>
                 {% endif %}
             </div>
             {% endif %}
         {% endfor %}
+    </section>
+{% endblock %}
 
-    </article>
 
-
-</body>
-</html>

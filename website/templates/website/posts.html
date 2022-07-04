@@ -1,74 +1,57 @@
+{% extends 'base.html'%}
 
-{% load static %}
+{% block title %}
+        <title>Posts</title>
+{% endblock %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LITReview_flux</title>
-    <link rel="stylesheet" href="{% static 'css/flux_style.css' %}">
-</head>
-<body>
-
-    <header>
-        {% if user.is_authenticated %}
-        <p id="connection">Bienvenue {{ request.user }}. <a href="{% url 'logout' %}">Se déconnecter</a></p>
-        {% endif %}
-        <div class="banner">
-            <a href="{% url 'flux' %}">Flux</a>
-            <a><b>Posts</b></a>
-            <a href="{% url 'follow_users' %}">Abonnements</a>
-        </div>
-        <h1 id="mainTitle">LITReview</h1>
-    </header>
-
-     <article>
+{% block content %}
+    <article>
         {% for post in posts %}
             {% if post.content_type == 'REVIEW' %}
-            <div class="post">
-                <div class="review">
-                    <div class="header_review">
-                        <p class ="title"> {{ post.user }} a publié une critique</p>
-                        <p class="date"> {{ post.time_created }}</p>
+                <div class="border border-3 rounded-3 my-4">
+                    <div class="d-flex justify-content-between m-3">
+                        <p> {{ post.user }} a publié une critique</p>
+                        <p> {{ post.time_created }}</p>
                     </div>
-                    <h3> {{ post.headline}}: score {{ post.rating }}/5</h3>
-                    <p> {{ post.body}}</p>
-                    <form method="post" action="{% url 'delete_review' post.id  %}"
-                          onsubmit="return confirm('Voulez vous vraiment supprimer cette critique ?')">
-                          {% csrf_token %}
-                          <button type="submit">Supprimer </button>
-                    </form>
-                    <form method="post" action="{% url 'update_review' post.id  %}">
-                          {% csrf_token %}
-                          <button type="submit">Modifier</button>
-                    </form>
+                        <h3 class="text-start m-3"> {{ post.headline}} - score {{ post.rating }}/5</h3>
+                        <p class="text-start m-3"> {{ post.body}}</p>
+                    <div class="d-flex justify-content-center m-3">
+                        <form method="post" action="{% url 'delete_review' post.id  %}"
+                            onsubmit="return confirm('Voulez vous vraiment supprimer cette critique ?')">
+                            {% csrf_token %}
+                            <button class="btn-danger rounded mx-3" type="submit">Supprimer </button>
+                        </form>
+                        <form method="post" action="{% url 'update_review' post.id  %}">
+                            {% csrf_token %}
+                            <button class="btn-primary rounded mx-3" type="submit">Modifier</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
             {% else %}
-            <div class="post">
-                <div class="ticket">
-                    <p class ="title"> {{ post.user }} demande une critique</p>
-                    <p class="date"> {{ post.time_created }}</p>
-                </div>
-                <p> {{ post.title }}: {{ post.description }}</p>
+                <div class="border border-success border-2 rounded-3 m-2 pb-2">
+                    <div class="d-flex justify-content-between m-3">
+                        <p> {{ post.user }} demande une critique</p>
+                        <p> {{ post.time_created }}</p>
+                    </div>
+                <p class="text-start m-3"> {{ post.title }}: {{ post.description }}</p>
                 {% if post.image %}
-                    <img src="{{ post.image.url }}">
+                    <img src="{{ post.image.url }}" class="d-flex justify-content-between m-3 rounded"
+                         style="width: 200px; height: auto;">
                 {% endif %}
-                <form method="post" action="{% url 'delete_ticket' post.id  %}"
-                          onsubmit="return confirm('Voulez vous vraiment supprimer ce ticket ?')">
-                    {% csrf_token %}
-                    <button type="submit">Supprimer </button>
-                </form>
-                 <form method="post" action="{% url 'update_ticket' post.id  %}">
-                     {% csrf_token %}
-                     <button type="submit">Modifier</button>
-                 </form>
-            </div>
+                    <div class="d-flex justify-content-center m-3">
+                        <form method="post" action="{% url 'delete_ticket' post.id  %}"
+                            onsubmit="return confirm('Voulez vous vraiment supprimer cette critique ?')">
+                            {% csrf_token %}
+                            <button class="btn-danger rounded mx-3" type="submit">Supprimer </button>
+                        </form>
+                        <form method="post" action="{% url 'update_ticket' post.id  %}">
+                            {% csrf_token %}
+                            <button class="btn-primary rounded mx-3" type="submit">Modifier</button>
+                        </form>
+                    </div>
+                </div>
             {% endif %}
         {% endfor %}
-
     </article>
-
-
-</body>
-</html>
+{% endblock %}
