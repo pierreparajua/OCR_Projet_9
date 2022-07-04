@@ -1,60 +1,43 @@
-# OCR_projet_4
+# OCR_projet_9
 ## Description du projet:
   Ce projet s'incris dans le cadre de la formation "Développeur d'application : Python" de OpenClassRooms.
-  Le but de ce projet et de créer un programme Python en ligne de commande qui permet de gérer un tournoi d'échecs. Ce programme doit fonctionner hors ligne et doit permettre de stocker les informations sur le disque à l'aide de "Tiny_db"
+  Le but de ce projet et de créer une MVP pour une application permettant à une communauté d'utilisateurs de consulter ou de solliciter une critique de livres à la demande.
   
 ## Fonctionnalités du programme:
   Ce programme permet:
-    - La sauvegarde des joueurs en base de données. (prénom, nom, date de naissance, sexe, classement).
-    - La gestion des joueurs avec des options de modification ou de suppression.
-    - La création d'un tournoi et son enregistrement en base de données.
-    - Chaque tournoi est caractérisé par :
-      * un nom
-      * un lieu
-      * une date
-      * un nombre de joueurs
-      * un nombre de tours
-      * une manière de gérer le temps dans les matchs
-      * une description
-    - Chaque tournoi peut être interrompu entre chaque ronde, sauvegarder et repris plus tard.
-    - L'ensemble des tournois enregistrés en base de données (fini ou en cours) peuvent être consultés sous forme d'un rapport de tournoi.
-    - La suppression d'un tournoi.
+    - se connecter et s’inscrire 
+    - le site ne doit pas être accessible à un utilisateur non connecté
+    - consulter un flux contenant les derniers tickets et les commentaires des utilisateurs qu'il suit, classés par ordre chronologique, les plus récents en premier 
+    - créer des critiques en réponse à des tickets
+    - créer des critiques qui ne sont pas en réponse à un ticket. Dans le cadre d'un processus en une étape, l'utilisateur créera un ticket puis un commentaire en réponse à son propre ticket
+    - voir, modifier et supprimer ses propres tickets et commentaires
+    - suivre les autres utilisateurs en entrant leur nom d'utilisateur
+    - voir qui il suit et suivre qui il veut ainsi que de cesser de suivre un utilisateur
     
- ## Pré-requis:
+## Pré-requis:
    - Language de programmation:
       Python3
    - Module utilisés:
-      - TinyDB
-      - Colorama
-      - Pytest
+      - Django 4
    - Un fichier **requirements.txt** est disponible sur le depository.
 
 ## Installation:
-   - Créer un dossier, par exemple "Programme échec".
+   - Créer un dossier, par exemple "LitReview".
    - Copier et dézipper l' archive dans le dossier.
    - Ouvrir une console et se placer dans le dossier.
    - Créer un environnement virtuel grâce à la commande " py -m venv env".
    - Activer l'environnent virtuel avec la commande : "source env/Scripts/activate".
    - Installer les packages nécessaires avec la commande : " pip install -r requirements.txt".
 
- ## Utilisation:
-   - Exécuter le programme soit en tapant "py main.py" dans la console ou au travers d'un éditeur de code.
-   - Le programme se lance sur le menu principal qui vous permet la gestion des joueurs ou des tournois.
-   - Le menu "gestion des joueurs" vous permet de créer, afficher, modifier ou supprimer un joueur.
-   - Le menu "gestion des tournois" vous permet de créer, de reprendre et de supprimer un tournoi.
-   - Le menu "gestion des tournois permet également d'afficher les rapports des tournois terminés
-   - La touche "m" permet le retour au menu précédent.
-   - On quitte le programme avec la touche "3" à partir du menu principal.
+## Utilisation:
+   - Exécuter le programme soit en tapant "py manage.py" dans la console ou au travers d'un éditeur de code.
+   - Dans le terminal, tapez: "python manage.py runserver" pour lancer le serveur local.
+   - Dans votre navigateur internet , rendez vous à l' adresse:" http://127.0.0.1:8000/" pour acceder au site
 
-  ## Flake8
-    Vous pouvez acceder au rapport Flak8 avec la commande :
-      flake8 --max-line-length 119 --format=html --htmldir=flake-report model view controller utils
-
-  
-   ## Version:
-   - Ce programme constitue une première version totalement en ligne de commande et hors ligne, qui doit être validé par le client.
+## Version:
+   - Cette application est la version 1
     
-   ## Auteurs:
+## Auteurs:
    Parajua Pierre
       
       
