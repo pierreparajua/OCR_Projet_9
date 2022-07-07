@@ -10,6 +10,9 @@ from website import forms
 
 @login_required
 def flux(request):
+    """
+    Manage the feed, to show their own and subscribers' tickets and reviews
+    """
     users_followed = UserFollows.objects.filter(user_id=request.user)
     reviews = Review.objects.all()
     tickets_user = Ticket.objects.filter(user=request.user)
@@ -44,6 +47,9 @@ def flux(request):
 
 @login_required
 def create_ticket(request):
+    """
+    Permit to create a new ticket
+    """
     ticket_form = forms.TicketForm()
     if request.method == "POST":
         ticket_form = forms.TicketForm(request.POST, request.FILES)
@@ -58,6 +64,9 @@ def create_ticket(request):
 
 @login_required
 def create_review(request):
+    """
+        Permit to create a new ticket
+    """
     ticket_form = forms.TicketForm()
     review_form = forms.ReviewForm()
     if request.method == "POST":
@@ -78,23 +87,37 @@ def create_review(request):
 
 @login_required
 def create_review_from_ticket(request, ticket_id):
-    ticket = Ticket.objects.get(pk=ticket_id)
-
-    review_form = forms.ReviewForm()
-    if request.method == "POST":
-        review_form = forms.ReviewForm(request.POST)
-        if review_form.is_valid():
-            review = review_form.save(commit=False)
-            review.user = request.user
-            review.ticket = Ticket.objects.get(pk=ticket_id)
-            review.save()
-            return redirect('flux')
-    return render(request, 'website/create_review_from_ticket.html', context={"ticket": ticket,
-                                                                              "review_form": review_form})
+    """
+        Permit to create a review to respond to a ticket
+    """
+    ticket_id_review = [review.ticket.pk for review in Review.objects.all()]
+    try:
+        if ticket_id not in ticket_id_review:
+            ticket = Ticket.objects.get(pk=ticket_id)
+            review_form = forms.ReviewForm()
+            if request.method == "POST":
+                review_form = forms.ReviewForm(request.POST)
+                if review_form.is_valid():
+                    review = review_form.save(commit=False)
+                    review.user = request.user
+                    review.ticket = Ticket.objects.get(pk=ticket_id)
+                    review.save()
+                    return redirect('flux')
+        return render(request, 'website/create_review_from_ticket.html', context={"ticket": ticket, "review_form":
+                                                                                  review_form})
+    except UnboundLocalError:
+        print("La critique existe déjà !!!")
+        return redirect('flux')
+    except Ticket.DoesNotExist:
+        print("Le ticket n 'existe pas")
+        return redirect('flux')
 
 
 @login_required
 def display_posts(request):
+    """
+    Display all ticket et review from user connected
+    """
     tickets = Ticket.objects.filter(user=request.user)
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
     reviews = Review.objects.filter(user=request.user)
@@ -106,6 +129,9 @@ def display_posts(request):
 
 @login_required
 def follow_users(request):
+    """
+    Manage the subscription system
+    """
     users_follow_you = [user_follow.user.username for user_follow in
                         UserFollows.objects.filter(followed_user=request.user.id)]
 
@@ -124,7 +150,10 @@ def follow_users(request):
 
 
 @login_required
-def delete_users(request, user_id):
+def delete_follow_user(request, user_id):
+    """
+        Delete a follow user
+    """
     try:
         user_follow = UserFollows.objects.get(user=request.user, followed_user=user_id)
         if request.method == "POST":
@@ -136,6 +165,9 @@ def delete_users(request, user_id):
 
 @login_required
 def delete_review(request, review_id):
+    """
+        Delete a review
+    """
     try:
         review = Review.objects.get(pk=review_id)
         if request.method == "POST":
@@ -147,24 +179,34 @@ def delete_review(request, review_id):
 
 @login_required
 def update_review(request, review_id):
-    review = Review.objects.get(pk=review_id)
-    review_form = forms.ReviewForm(instance=review)
-    if request.method == "POST":
-        update_form = forms.ReviewForm(request.POST)
-        if update_form.is_valid():
-            review_updated = update_form.save(commit=False)
-            review_updated.id = review.id
-            review_updated.user = review.user
-            review_updated.time_created = review.time_created
-            review_updated.ticket = review.ticket
-            review_updated.save()
-            return redirect('posts')
-    context = {"review_form": review_form}
-    return render(request, 'website/update_review.html', context=context)
+    """
+        Modifie a review
+    """
+    try:
+        review = Review.objects.get(pk=review_id)
+        review_form = forms.ReviewForm(instance=review)
+        if request.method == "POST":
+            update_form = forms.ReviewForm(request.POST)
+            if update_form.is_valid():
+                review_updated = update_form.save(commit=False)
+                review_updated.id = review.id
+                review_updated.user = review.user
+                review_updated.time_created = review.time_created
+                review_updated.ticket = review.ticket
+                review_updated.save()
+                return redirect('posts')
+        context = {"review_form": review_form}
+        return render(request, 'website/update_review.html', context=context)
+    except Review.DoesNotExist:
+        print("La critique n 'existe pas")
+        return redirect('posts')
 
 
 @login_required
 def delete_ticket(request, ticket_id):
+    """
+        Delete a review
+    """
     try:
         ticket = Ticket.objects.get(pk=ticket_id)
         if request.method == "POST":
@@ -176,17 +218,24 @@ def delete_ticket(request, ticket_id):
 
 @login_required
 def update_ticket(request, ticket_id):
-    ticket = Ticket.objects.get(pk=ticket_id)
-    ticket_form = forms.TicketForm(instance=ticket)
-    if request.method == "POST":
-        update_form = forms.TicketForm(request.POST, request.FILES)
-        if update_form.is_valid():
-            ticket_updated = update_form.save(commit=False)
-            ticket_updated.id = ticket.id
-            ticket_updated.user = ticket.user
-            ticket_updated.time_created = ticket.time_created
-            ticket_updated.save()
+    """
+        Modifie a ticket
+    """
+    try:
+        ticket = Ticket.objects.get(pk=ticket_id)
+        ticket_form = forms.TicketForm(instance=ticket)
+        if request.method == "POST":
+            update_form = forms.TicketForm(request.POST, request.FILES)
+            if update_form.is_valid():
+                ticket_updated = update_form.save(commit=False)
+                ticket_updated.id = ticket.id
+                ticket_updated.user = ticket.user
+                ticket_updated.time_created = ticket.time_created
+                ticket_updated.save()
 
-            return redirect('posts')
-    context = {"ticket_form": ticket_form}
-    return render(request, 'website/update_ticket.html', context=context)
+                return redirect('posts')
+        context = {"ticket_form": ticket_form}
+        return render(request, 'website/update_ticket.html', context=context)
+    except Ticket.DoesNotExist:
+        print("Le ticket n 'existe pas")
+        return redirect('posts')

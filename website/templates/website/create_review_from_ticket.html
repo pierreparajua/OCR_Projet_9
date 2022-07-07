@@ -23,7 +23,7 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="fields">
-                {{ review_form.as_ul }}
+                {{ review_form.as_table }}
             </div>
             <div>
                 <button  type="submit" class="btn-primary rounded">Envoyer</button>

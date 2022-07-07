@@ -4,6 +4,9 @@ from django.db import models
 
 
 class Ticket(models.Model):
+    """
+    Ticket model
+    """
     objects = models.Manager()
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=2048, blank=True)
@@ -16,6 +19,9 @@ class Ticket(models.Model):
 
 
 class Review(models.Model):
+    """
+        Review model
+    """
     objects = models.Manager()
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
