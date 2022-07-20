@@ -40,7 +40,6 @@ def flux(request):
                    key=lambda post: post.time_created, reverse=True)
 
     tickets_already_answer = Ticket.objects.filter(pk__in=reviews_ticket_id)
-    print(tickets_already_answer)
 
     return render(request, 'website/flux.html', context={'posts': posts,
                                                          'tickets_already_answer': tickets_already_answer})
@@ -245,4 +244,3 @@ def update_ticket(request, ticket_id):
             return redirect('posts')
     context = {"ticket_form": ticket_form}
     return render(request, 'website/update_ticket.html', context=context)
-
