@@ -23,7 +23,7 @@
 
 ## Installation:
    - Créer un dossier, par exemple "LitReview".
-   - Copier et dézipper l' archive dans le dossier.
+   - Copier et dézipper l' archive dans le dossier ou utiliser la commande "git clone".
    - Ouvrir une console et se placer dans le dossier.
    - Créer un environnement virtuel grâce à la commande " py -m venv env".
    - Activer l'environnent virtuel avec la commande : "source env/Scripts/activate".
